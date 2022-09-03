@@ -1,0 +1,12 @@
+@mixin flexCenter{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin text($size, $weight, $color, $line:1){
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+  line-height: $line;
+}
