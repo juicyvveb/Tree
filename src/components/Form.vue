@@ -33,6 +33,7 @@ export default {
     height: 100%;
     background: rgba(228, 228, 228, 0.8);
     @include flexCenter;
+    z-index: 10;
     .form{
       height: 8%;
       background: yellow;

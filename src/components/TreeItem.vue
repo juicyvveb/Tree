@@ -1,45 +1,56 @@
 <template>
-  <li>
-    <h3 
-      @click="clickListen()"
-      :class="{list: isList, open: isOpen}"
-      >{{core.name}} 
-      </h3>
-      <button class="del" @click="$emit('remove')">x</button>
-    <ul v-show="isOpen && isList">
-      <TreeItem v-for="(child, i) in model.children"
-       :key="child" :model="child"
-       @remove="remove(i)"/>
-      <li @click="this.form = true">add item</li>
-    </ul>
-    <Form v-if="form" @createStuff="createStuff" @close="form = false"/>
-  </li>
-
-  <!-- <button @click="clickListen">click</button> -->
-  <!-- <p>{{click2 - click1}}</p> -->
+    <Transition name="fade">
+    <li v-show="del" >
+      <h3 
+        @click="clickListen()"
+        :class="{list: isList, open: isOpen}"
+        >{{parentNum}} {{core.name}} <span class="marker" v-if="isList">[{{isOpen?'-':'+'}}]</span>
+        </h3>
+        <button class="del" @click="$emit('remove'), del = false">x</button>
+        <Transition name="listTr">
+        <ul  v-show="isOpen && isList">
+        <!-- <TransitionGroup tag="ul" class="block" name="item" v-show="isOpen && isList"> -->
+          <TreeItem v-for="(child, i) in model.children"
+          :key="child"
+          :parentNum="`${parentNum}.${i+1}`" 
+          :model="child"
+          @remove="remove(i)"
+          
+          />
+        <li @click="this.form = true">add item</li>
+        </ul>
+        <!-- </TransitionGroup> -->
+      </Transition>
+      <Form v-if="form" @createStuff="createStuff" @close="form = false"/>
+    </li>
+  </Transition>
 </template>
 
 <script>
 import Form from './Form.vue';
-
+import remove from '../assets/js/remove';
 export default {
   name: 'TreeItem',
   props: {
-    model: Object
+    model: Object,
+    parentNum: Number,
   },
   data(){
     return {
+      del: true,
       isOpen: false,
       core: this.model,
       click1: 0,
       click2: 0,
       form: false,
+      removing: false
     }
   },
   computed:{
     isList(){
       return this.model.children 
-    }
+    },
+    
   },
   methods: {
     createStuff(name){
@@ -79,8 +90,14 @@ export default {
       }
     },
     remove(i){
-      console.log(i)
-      this.core.children.splice(i, 1)
+      new Promise(res => {
+        this.removing = true;
+        res(i)
+      })
+      .then(() => {
+        remove('.removing')
+        this.core.children.splice(i, 1)
+      })
     }
   },
   components: {
@@ -90,6 +107,7 @@ export default {
 </script>
 
 <style lang="scss"  scoped>
+  @import '../assets/scss/main.scss';
 * {
   text-align: left;
 }
@@ -99,34 +117,60 @@ export default {
     color: blue;
     position: relative;
     text-transform: uppercase;
-    &:after{
-      content: '^';
-      color: black;
-      position: absolute;
-      width: 10%;
-      right: -10%;
-      transition: all .3s ease-in-out;
-    }
   }
-  h3.list.open{
-    &:after{
-      transform: scale(1, -1);
-    }
-  }
-
 
   h3{
     display: inline-block;
     margin-right: 10%;
     margin-bottom: 5%;
-    span {
-      color: gray;
-      font-size: 10px;
-      text-decoration: underline;
+    .marker{
+      @include text(20px, 700, rgb(76, 191, 27));
     }
   }
 
   .del{
     display: inline;
   }
+
+  // .fade-move,
+// .fade-enter-from,
+// .fade-leave-to{
+//   transform: translateX(20px);
+//   opacity: 0;
+// }
+
+// .fade-enter-active,
+// .fade-leave-active{
+//   transition: all .3s ease-in-out;
+//   // position: absolute;
+// }
+// .listTr-enter-from,
+// .listTr-leave-to{
+//   transform: translateX(-50px);
+//   opacity: 0;
+// }
+
+
+// .listTr-enter-active,
+// .listTr-leave-active{
+//   transition: all .2s ease-in-out;
+// }
+.block {
+  position: relative;
+}
+.item-move {
+  transition: all .8s ease;
+}
+.item-enter-active,
+.item-leave-active{
+  position: absolute;
+}
+
+.item-enter-from {
+  transform: translate(-50px);
+}
+.item-leave-to{
+  transform: translateX(50px);
+}
+
 </style>

@@ -1,15 +1,17 @@
 <template>
   <h3>list</h3>
-  <ul>
-    <Item :model="tree"/>
+    <ul>
+  <!-- <TransitionGroup name="item"> -->
+    <Item :model="item" :parentNum="i+1" v-for="(item,i) in tree" :key="i"/>
+  <!-- </TransitionGroup> -->
   </ul>
 </template>
 
 <script>
 import Item from './components/TreeItem.vue';
 
-const tree = {
-  name: 'head',
+const tree = [{
+  name: 'hdvd dvead',
   children: [
     {
       name: 'head_1_1'
@@ -57,7 +59,7 @@ const tree = {
       ]
     }
   ]
-}
+}]
 
 export default {
   name: 'App',
@@ -81,4 +83,7 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+
+
 </style>
