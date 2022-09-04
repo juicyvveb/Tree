@@ -1,8 +1,8 @@
 <template>
   <h3>list</h3>
-    <ul>
+    <ul class="list">
   <!-- <TransitionGroup name="item"> -->
-    <Item :model="item" :parentNum="i+1" v-for="(item,i) in tree" :key="i"/>
+    <Item :model="item" :parentNum="`${i+1}`" v-for="(item,i) in tree" :key="i"/>
   <!-- </TransitionGroup> -->
   </ul>
 </template>
@@ -11,25 +11,25 @@
 import Item from './components/TreeItem.vue';
 
 const tree = [{
-  name: 'hdvd dvead',
+  name: '',
   children: [
     {
-      name: 'head_1_1'
+      name: ''
     },
     {
-      name: 'head_1_2'
+      name: ''
     },
     {
-      name: 'head_1_3',
+      name: '',
       children: [
         {
-          name: 'head_1_3_1'
+          name: ''
         },
         {
-          name: 'head_1_3_2'
+          name: ''
         },
         {
-          name: 'head_1_3_3',
+          name: '',
           children: [
             {
               name: 'sub'
@@ -74,7 +74,9 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+@import './assets/scss/main.scss';
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -85,5 +87,11 @@ export default {
 }
 
 
+
+.list{
+  padding: 0;
+  width: 100%;
+  background:$bg;
+}
 
 </style>

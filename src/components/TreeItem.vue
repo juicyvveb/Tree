@@ -1,26 +1,31 @@
 <template>
     <Transition name="fade">
-    <li v-show="del" >
-      <h3 
+    <li v-show="display" class="item">
+      <div class="item-head">
+        <h3 
         @click="clickListen()"
-        :class="{list: isList, open: isOpen}"
-        >{{parentNum}} {{core.name}} <span class="marker" v-if="isList">[{{isOpen?'-':'+'}}]</span>
+        :class="{'item-title__list': isList, 'item-title': 1}"
+        >
+          {{parentNum}} {{isList ? model.name || 'Node' : model.name || 'item'}}
         </h3>
-        <button class="del" @click="$emit('remove'), del = false">x</button>
-        <Transition name="listTr">
-        <ul  v-show="isOpen && isList">
-        <!-- <TransitionGroup tag="ul" class="block" name="item" v-show="isOpen && isList"> -->
-          <TreeItem v-for="(child, i) in model.children"
-          :key="child"
-          :parentNum="`${parentNum}.${i+1}`" 
-          :model="child"
-          @remove="remove(i)"
-          
-          />
-        <li @click="this.form = true">add item</li>
-        </ul>
-        <!-- </TransitionGroup> -->
-      </Transition>
+        <span :class="{marker: 1, 'marker__open': isOpen}" v-if="isList"></span>
+        <button 
+        class="item-button item-button__del" 
+        @click="$emit('remove'), display = false">
+          <span></span>
+        </button>
+      </div>
+        <Transition name="appear">
+          <TransitionGroup tag="ul" class="item-list" name="list" v-show="isOpen && isList">
+            <TreeItem v-for="(child, i) in model.children"
+            :key="child"
+            :parentNum="`${parentNum}.${i+1}`" 
+            :model="child"
+            @remove="remove(i)"
+            />
+          <li @click="this.form = true" :key="1" class="item-adding">add item to {{parentNum}}</li>
+          </TransitionGroup>   
+        </Transition>
       <Form v-if="form" @createStuff="createStuff" @close="form = false"/>
     </li>
   </Transition>
@@ -28,30 +33,37 @@
 
 <script>
 import Form from './Form.vue';
-import remove from '../assets/js/remove';
+
 export default {
   name: 'TreeItem',
   props: {
     model: Object,
-    parentNum: Number,
+    parentNum: String,
   },
   data(){
     return {
-      del: true,
+      display: true,
       isOpen: false,
       core: this.model,
       click1: 0,
       click2: 0,
       form: false,
-      removing: false
+      name: '',
     }
   },
   computed:{
     isList(){
       return this.model.children 
     },
-    
-  },
+    background(){
+      function getRandom(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min)) + min;
+      }
+      return `rgba(${getRandom(1,250)}, ${getRandom(1,350)}, ${getRandom(1,350)}, 0.8)`
+      }
+    },
   methods: {
     createStuff(name){
       if(!this.isList){
@@ -90,14 +102,7 @@ export default {
       }
     },
     remove(i){
-      new Promise(res => {
-        this.removing = true;
-        res(i)
-      })
-      .then(() => {
-        remove('.removing')
-        this.core.children.splice(i, 1)
-      })
+      this.core.children.splice(i, 1);
     }
   },
   components: {
@@ -107,70 +112,114 @@ export default {
 </script>
 
 <style lang="scss"  scoped>
-  @import '../assets/scss/main.scss';
-* {
-  text-align: left;
-}
-  h3.list{
-    
-    width: fit-content;
-    color: blue;
-    position: relative;
-    text-transform: uppercase;
-  }
+@import '../assets/scss/main.scss';
 
-  h3{
-    display: inline-block;
-    margin-right: 10%;
-    margin-bottom: 5%;
-    .marker{
-      @include text(20px, 700, rgb(76, 191, 27));
+  .item{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 3% 0 3% 7%;
+    position: relative;
+    &-head{
+      display: flex;
+      align-items: center;
+      padding: 2%;
+      padding-left: 0;
+      .item-title{
+        width: fit-content;
+        &__list{
+        color: $blue;
+        text-transform: uppercase;
+        }
+      }
+      .marker{
+          width: 10px;
+          height: 10px;
+          background: linear-gradient(to bottom left, black 50%, $bg 50%);
+          display: block;
+          margin-left: 20px;
+          transform:rotate(-45deg);
+          position: relative;
+          align-self: center;
+          transition: all .3 ease-in-out;
+        &__open{
+          transform: rotate(135deg);
+        }
+      }
+    }
+    
+    &-button {
+      text-align: center;
+      width: 18px;
+      height: 18px;
+      margin-left: 20px;
+      background: $red;
+      border: none;
+      border-radius: 5px;
+      span {
+        display: block;
+        margin: auto;
+        width: 80%;
+        height: 14%;
+        background: white;
+        transform: rotate(45deg);
+        position: relative;
+        border-radius: 5px;
+        &:before{
+          content: '';
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          top:0;
+          left: 0;
+          transform: rotate(-90deg);
+          background: inherit;
+          border-radius: inherit;
+        }
+      }
+    }
+    &-list{
+      width: 100%;
+    }
+    &-adding{
+      @include text(15px, 500, black, 2.5);
     }
   }
 
-  .del{
-    display: inline;
-  }
 
-  // .fade-move,
-// .fade-enter-from,
-// .fade-leave-to{
-//   transform: translateX(20px);
-//   opacity: 0;
-// }
-
-// .fade-enter-active,
-// .fade-leave-active{
-//   transition: all .3s ease-in-out;
-//   // position: absolute;
-// }
-// .listTr-enter-from,
-// .listTr-leave-to{
-//   transform: translateX(-50px);
-//   opacity: 0;
-// }
+//transition
 
 
-// .listTr-enter-active,
-// .listTr-leave-active{
-//   transition: all .2s ease-in-out;
-// }
-.block {
-  position: relative;
+
+.list-move{
+  background: red;
 }
-.item-move {
-  transition: all .8s ease;
+.list-move, /* apply transition to moving elements */
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
 }
-.item-enter-active,
-.item-leave-active{
+
+.list-enter-from {
+  transform: scale(.7);
+}
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.list-leave-active {
   position: absolute;
 }
 
-.item-enter-from {
-  transform: translate(-50px);
+.appear-enter-active,
+.appear-leave-active {
+  transition: all 0.5s ease;
 }
-.item-leave-to{
-  transform: translateX(50px);
+.appear-enter-from,
+.appear-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
 }
 
 </style>
