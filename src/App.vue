@@ -1,10 +1,8 @@
 <template>
   <h3>list</h3>
     <ul class="list">
-  <!-- <TransitionGroup name="item"> -->
-    <Item :model="item" :parentNum="`${i+1}`" v-for="(item,i) in tree" :key="i"/>
-  <!-- </TransitionGroup> -->
-  </ul>
+      <Item :model="item" :parentNum="`${i+1}`" v-for="(item,i) in tree" :key="i"/>
+    </ul>
 </template>
 
 <script>
@@ -92,6 +90,11 @@ export default {
   padding: 0;
   width: 100%;
   background:$bg;
+  transition: all .3s ease-in-out;
 }
+.list-move{
+  transition: all .3s ease-in-out;
+}
+
 
 </style>

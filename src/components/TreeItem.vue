@@ -191,9 +191,7 @@ export default {
 
 
 
-.list-move{
-  background: red;
-}
+
 .list-move, /* apply transition to moving elements */
 .list-enter-active,
 .list-leave-active {
@@ -212,6 +210,8 @@ export default {
   position: absolute;
 }
 
+
+.appear-move,
 .appear-enter-active,
 .appear-leave-active {
   transition: all 0.5s ease;
