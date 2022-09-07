@@ -12,7 +12,7 @@
         <span 
           :class="{marker: 1, 'marker__open': isOpen}" 
           v-if="isList"
-          :style="{background: style ? `linear-gradient(to bottom left, black 50%, ${style.bgColor} 50%)` : false}"></span>
+          :style="{background: style.bgColor ? `linear-gradient(to bottom left, black 50%, ${style.bgColor} 50%)` : g}"></span>
         <button 
         class="item-button item-button__del" 
         @click="$emit('remove'), display = false"
