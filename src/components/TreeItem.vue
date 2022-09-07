@@ -5,14 +5,20 @@
         <h3 
         @click="clickListen()"
         :class="{'item-title__list': isList, 'item-title': 1}"
+        :style="{color: isList ? style?.nodeColor : style?.subColor}"
         >
           {{parentNum}} {{isList ? model.name || 'Node' : model.name || 'item'}}
         </h3>
-        <span :class="{marker: 1, 'marker__open': isOpen}" v-if="isList"></span>
+        <span 
+          :class="{marker: 1, 'marker__open': isOpen}" 
+          v-if="isList"
+          :style="{background: style ? `linear-gradient(to bottom left, black 50%, ${style.bgColor} 50%)` : false}"></span>
         <button 
         class="item-button item-button__del" 
-        @click="$emit('remove'), display = false">
-          <span></span>
+        @click="$emit('remove'), display = false"
+        
+        >
+          <span :style="{backgroundColor: style?.delColor}"></span>
         </button>
       </div>
         <Transition name="appear">
@@ -23,8 +29,9 @@
             :parentNum="`${parentNum}.${i+1}`" 
             :model="child"
             @remove="remove(i)"
+            :style="style"
             />
-          <li @click="this.form = true" :key="1" class="item-adding">add item to {{parentNum}}</li>
+          <li @click="this.form = true" :key="1" class="item-adding" :style="{color: style?.addColor}">add item to {{parentNum}}</li>
           </TransitionGroup> 
           </ul>  
         </Transition>
@@ -41,6 +48,7 @@ export default {
   props: {
     model: Object,
     parentNum: String,
+    style: Object,
   },
   data(){
     return {
@@ -64,6 +72,8 @@ export default {
         return Math.floor(Math.random() * (max - min)) + min;
       }
       return `rgba(${getRandom(1,250)}, ${getRandom(1,350)}, ${getRandom(1,350)}, 0.8)`
+    
+      
       }
     },
   methods: {
@@ -164,7 +174,7 @@ export default {
         // margin: auto;
         width: 80%;
         height: 15%;
-        background: rgb(241, 94, 94);
+        background: $red;
         transform: rotate(45deg);
         position: absolute;
         border-radius: 5px;
@@ -185,7 +195,7 @@ export default {
       width: 100%;
     }
     &-adding{
-      @include text(15px, 700, rgb(12, 148, 30), 2.5);
+      @include text(15px, 700, $green);
     }
   }
 
@@ -237,7 +247,7 @@ export default {
 .appear-enter-from,
 .appear-leave-to {
   opacity: 0;
-  transform: translateX(-50px);
+  transform: translateY(-50px);
 }
 
 </style>

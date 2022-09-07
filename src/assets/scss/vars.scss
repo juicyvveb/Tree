@@ -13,9 +13,10 @@
 
 
 $blue: rgb(19, 73, 211);
-$red: rgb(249, 75, 66);
+$red: rgb(202, 39, 30);
 $bg: rgb(253, 253, 253);
 $gray: rgb(144, 147, 144);
+$green: rgb(12, 199, 27);
 
 $laptop: 720px;
 
@@ -25,5 +26,8 @@ $laptop: 720px;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition-property: color, background-color;
+  transition-timing-function: ease-in-out;
+  transition-duration: .3s;
 }
 

@@ -3,12 +3,22 @@
     <ul :class="{list: 1, 'list__open': open}" >
       <Item :model="item" 
       @click="open = !open"
-       :parentNum="`${i+1}`" v-for="(item,i) in tree" :key="i"/>
+      :parentNum="`${i+1}`" v-for="(item,i) in tree" :key="i"
+      :style="selectedThem || {}"/>
     </ul>
+    <div class="info">
+      <div class="info-item">
+        <span :style="{color: style?.addColor}"><span>*</span> double click - </span>
+        <p :style="{color: style?.subColor}">change the type of list-item. A common item will become a Node, and a node will be a common item</p>
+      </div>
+    </div>
+    <Them @changeThem="select"/>
+    <h4>{{selectedThem || 'nothing'}}</h4>
 </template>
 
 <script>
 import Item from './components/TreeItem.vue';
+import Them from './components/Them.vue';
 
 const tree = [{
   name: '',
@@ -66,15 +76,31 @@ export default {
   data(){
     return {
       tree,
-      open: false
+      open: false,
+      selectedThem: '',
     }
   },
   components: {
-    Item
+    Item,
+    Them
   },
   methods: {
-    show(){
-      console.log('fdf')
+    select(val){
+      this.selectedThem = val
+    }
+  },
+  computed: {
+    style(){
+      return this.selectedThem
+    }
+  },
+  watch: {
+    selectedThem(nw){
+      if(nw?.bgColor){
+        document.body.style.backgroundColor = nw.bgColor;
+        return
+      }
+      document.body.setAttribute('style', '');
     }
   }
 }
@@ -97,10 +123,25 @@ export default {
 body{
   background: $bg;
   margin: 0;
-  padding: 0;
-  padding-top: 20px;
+  padding: 30px;
 }
 
+.info {
+  margin-top: 10%;
+  &-item{
+    span {
+      @include text(15px, 500, gray);
+      font-style: italic;
+      span{
+        @include text(20px, 500, $green);
+      }
+    }
+    p{
+      @include text(15px, 500, black);
+      display: inline;
+    }
+  }
+}
 
 
 
