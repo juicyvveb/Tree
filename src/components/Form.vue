@@ -51,9 +51,13 @@ export default {
         font-weight: 500;
         padding-left: 5%;
       }
+      &-input:focus{
+        color: black;
+      }
       &-button{
         color: white;
         background: rgb(69, 209, 69);
+        text-align: center;
       }
     }
   }

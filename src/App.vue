@@ -1,12 +1,24 @@
 <template>
-  <h3>list</h3>
-    <ul class="list">
-      <Item :model="item" :parentNum="`${i+1}`" v-for="(item,i) in tree" :key="i"/>
+    <h3>Tree View</h3>
+    <ul :class="{list: 1, 'list__open': open}" >
+      <Item :model="item" 
+      @click="open = !open"
+      :parentNum="`${i+1}`" v-for="(item,i) in tree" :key="i"
+      :style="selectedThem || {}"/>
     </ul>
+    <div class="info">
+      <div class="info-item">
+        <span :style="{color: style?.addColor}"><span>*</span> double click - </span>
+        <p :style="{color: style?.subColor}">change the type of list-item. A common item will become a Node, and a node will be a common item</p>
+      </div>
+    </div>
+    <Them @changeThem="select"/>
+    <h4>{{selectedThem || 'nothing'}}</h4>
 </template>
 
 <script>
 import Item from './components/TreeItem.vue';
+import Them from './components/Them.vue';
 
 const tree = [{
   name: '',
@@ -15,10 +27,10 @@ const tree = [{
       name: ''
     },
     {
-      name: ''
+      name: 'named'
     },
     {
-      name: '',
+      name: 'named',
       children: [
         {
           name: ''
@@ -38,19 +50,19 @@ const tree = [{
           ]
         },
         {
-          name: 'head_1_3_3',
+          name: 'named',
           children: [
             {
-              name: 'sub_1_1'
+              name: ''
             },
             {
-              name: 'sub_1_1'
+              name: 'named'
             },
             {
-              name: 'sub_1_1'
+              name: ''
             },
             {
-              name: 'sub_1_1'
+              name: 'named'
             }
           ]
         },
@@ -63,16 +75,38 @@ export default {
   name: 'App',
   data(){
     return {
-      tree
+      tree,
+      open: false,
+      selectedThem: '',
     }
   },
   components: {
-    Item
+    Item,
+    Them
+  },
+  methods: {
+    select(val){
+      this.selectedThem = val
+    }
+  },
+  computed: {
+    style(){
+      return this.selectedThem
+    }
+  },
+  watch: {
+    selectedThem(nw){
+      if(nw?.bgColor){
+        document.body.style.backgroundColor = nw.bgColor;
+        return
+      }
+      document.body.setAttribute('style', '');
+    }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import './assets/scss/main.scss';
 
 #app {
@@ -81,20 +115,36 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+
+  h3 {
+    text-align: center;
+  }
+}
+body{
+  background: $bg;
+  margin: 0;
+  padding: 30px;
+}
+
+.info {
+  margin-top: 10%;
+  &-item{
+    span {
+      @include text(15px, 500, gray);
+      font-style: italic;
+      span{
+        @include text(20px, 500, $green);
+      }
+    }
+    p{
+      @include text(15px, 500, black);
+      display: inline;
+    }
+  }
 }
 
 
 
-.list{
-  padding: 0;
-  width: 100%;
-  background:$bg;
-  transition: all .3s ease-in-out;
-}
-.list-move{
-  transition: all .3s ease-in-out;
-}
 
 
 </style>
