@@ -1,6 +1,6 @@
 <template>
     <Transition name="fade">
-    <li v-show="display" class="item">
+    <li v-show="display" :class="{item:1, 'item__open': isOpen}">
       <div class="item-head">
         <h3 
         @click="clickListen()"
@@ -16,7 +16,8 @@
         </button>
       </div>
         <Transition name="appear">
-          <TransitionGroup tag="ul" class="item-list" name="list" v-show="isOpen && isList">
+          <ul v-show="isOpen && isList" :class="{'item-list': 1}">
+          <TransitionGroup  name="list" >
             <TreeItem v-for="(child, i) in model.children"
             :key="child"
             :parentNum="`${parentNum}.${i+1}`" 
@@ -24,7 +25,8 @@
             @remove="remove(i)"
             />
           <li @click="this.form = true" :key="1" class="item-adding">add item to {{parentNum}}</li>
-          </TransitionGroup>   
+          </TransitionGroup> 
+          </ul>  
         </Transition>
       <Form v-if="form" @createStuff="createStuff" @close="form = false"/>
     </li>
@@ -149,21 +151,22 @@ export default {
     }
     
     &-button {
-      text-align: center;
-      width: 18px;
-      height: 18px;
+      @include flexCenter;
+      width: 25px;
+      height: 25px;
       margin-left: 20px;
-      background: $red;
+      background: none;
       border: none;
-      border-radius: 5px;
+      // border-radius: 5px;
+      position: relative;
       span {
         display: block;
-        margin: auto;
+        // margin: auto;
         width: 80%;
-        height: 14%;
-        background: white;
+        height: 15%;
+        background: rgb(241, 94, 94);
         transform: rotate(45deg);
-        position: relative;
+        position: absolute;
         border-radius: 5px;
         &:before{
           content: '';
@@ -182,11 +185,26 @@ export default {
       width: 100%;
     }
     &-adding{
-      @include text(15px, 500, black, 2.5);
+      @include text(15px, 700, rgb(12, 148, 30), 2.5);
     }
   }
 
+  //height-change Transition
+  .item{
+    height: auto;
+    max-height: 60px;
+    transition: all .5s ease-in-out;
+    overflow: hidden;
+    &__open{
+      max-height: 100%;
+    }
+  }
+ 
+ 
 
+@media (min-width: $laptop){
+    
+}
 //transition
 
 
@@ -219,7 +237,7 @@ export default {
 .appear-enter-from,
 .appear-leave-to {
   opacity: 0;
-  transform: translateY(-30px);
+  transform: translateX(-50px);
 }
 
 </style>

@@ -1,7 +1,9 @@
 <template>
-  <h3>list</h3>
-    <ul class="list">
-      <Item :model="item" :parentNum="`${i+1}`" v-for="(item,i) in tree" :key="i"/>
+    <h3>Tree View</h3>
+    <ul :class="{list: 1, 'list__open': open}" >
+      <Item :model="item" 
+      @click="open = !open"
+       :parentNum="`${i+1}`" v-for="(item,i) in tree" :key="i"/>
     </ul>
 </template>
 
@@ -15,10 +17,10 @@ const tree = [{
       name: ''
     },
     {
-      name: ''
+      name: 'named'
     },
     {
-      name: '',
+      name: 'named',
       children: [
         {
           name: ''
@@ -38,19 +40,19 @@ const tree = [{
           ]
         },
         {
-          name: 'head_1_3_3',
+          name: 'named',
           children: [
             {
-              name: 'sub_1_1'
+              name: ''
             },
             {
-              name: 'sub_1_1'
+              name: 'named'
             },
             {
-              name: 'sub_1_1'
+              name: ''
             },
             {
-              name: 'sub_1_1'
+              name: 'named'
             }
           ]
         },
@@ -63,16 +65,22 @@ export default {
   name: 'App',
   data(){
     return {
-      tree
+      tree,
+      open: false
     }
   },
   components: {
     Item
+  },
+  methods: {
+    show(){
+      console.log('fdf')
+    }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import './assets/scss/main.scss';
 
 #app {
@@ -81,20 +89,21 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+
+  h3 {
+    text-align: center;
+  }
 }
-
-
-
-.list{
+body{
+  background: $bg;
+  margin: 0;
   padding: 0;
-  width: 100%;
-  background:$bg;
-  transition: all .3s ease-in-out;
+  padding-top: 20px;
 }
-.list-move{
-  transition: all .3s ease-in-out;
-}
+
+
+
+
 
 
 </style>
