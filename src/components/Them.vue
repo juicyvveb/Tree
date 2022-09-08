@@ -9,8 +9,8 @@
       >
       <label 
         :for="them"
-        :class="{label: 1, 'label__active': select == them}"
-        :style="{backgroundColor: utils[them]?.bgColor}"><span>{{them}}</span></label>
+        :class="{label: 1, 'label__active': select == them, 'label__default': them=='default'}"
+        :style="{backgroundColor: themes[them]?.bgColor}"><span>{{them}}</span></label>
     </div>
   </div>
   
@@ -22,19 +22,18 @@ import {themes} from '../assets/js/utils';
 export default {
   data(){
     return {
-      thems: 'rhythm frigid peace marinette',
-      select: '',
-      utils: themes
+      select: 'default',
+      themes: themes
     }
   },
   watch: {
     select(nw){
-      this.$emit('changeThem', this.utils[nw])
+      this.$emit('changeThem', themes[nw])
     }
   },
   computed: {
     themsArr(){
-      return this.thems.split(' ');
+      return Object.keys(themes);
     }
   }
 }
@@ -45,24 +44,30 @@ export default {
 
 .thems {
   @include flexCenter;
-  justify-content: flex-end;
+  align-items: stretch;
+  margin-top: 10%;
   &-item{
-    margin-left: 5%;
+    margin-left: 3%;
     input{
       display: none;
     }
-    .label {
+    .label { 
       &__active{
         &:before{
           transform: translateY(-40%);
           box-shadow: 0px 0px 5px 3px;
         }
       }
+      &__default{
+        &:before{
+          background-color: white !important;
+        }
+      }
       &:before {
         content: '';
         display: block;
-        width: 30px;
-        height: 30px;
+        min-width: 5vw;
+        min-height: 5vw;  
         border: 1px solid black;
         background-color: inherit;
         transition: all .3s ease-in-out;

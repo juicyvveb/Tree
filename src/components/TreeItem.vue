@@ -1,7 +1,8 @@
 <template>
-    <Transition name="fade">
     <li v-show="display" :class="{item:1, 'item__open': isOpen}">
+
       <div class="item-head">
+
         <h3 
         @click="clickListen()"
         :class="{'item-title__list': isList, 'item-title': 1}"
@@ -9,35 +10,33 @@
         >
           {{parentNum}} {{isList ? model.name || 'Node' : model.name || 'item'}}
         </h3>
-        <span 
-          :class="{marker: 1, 'marker__open': isOpen}" 
-          v-if="isList"
-          :style="{background: style.bgColor ? `linear-gradient(to bottom left, black 50%, ${style.bgColor} 50%)` : g}"></span>
-        <button 
-        class="item-button item-button__del" 
-        @click="$emit('remove'), display = false"
+
+        <button :class="{'item-button': 1, 'item-button__open': isOpen, 'item-button__marker': 1}"  v-if="isList">
+          <span></span>
+        </button>
         
-        >
+        <button 
+          class="item-button item-button__del" 
+          @click="$emit('remove'), display = false">
           <span :style="{backgroundColor: style?.delColor}"></span>
         </button>
       </div>
         <Transition name="appear">
-          <ul v-show="isOpen && isList" :class="{'item-list': 1}">
-          <TransitionGroup  name="list" >
-            <TreeItem v-for="(child, i) in model.children"
-            :key="child"
-            :parentNum="`${parentNum}.${i+1}`" 
-            :model="child"
-            @remove="remove(i)"
-            :style="style"
-            />
-          <li @click="this.form = true" :key="1" class="item-adding" :style="{color: style?.addColor}">add item to {{parentNum}}</li>
-          </TransitionGroup> 
+          <ul v-show="isOpen && isList" class='item-list'>
+            <TransitionGroup  name="list">
+              <TreeItem v-for="(child, i) in model.children"
+                :key="child"
+                :parentNum="`${parentNum}.${i+1}`" 
+                :model="child"
+                @remove="remove(i)"
+                :style="style"
+              />
+              <li @click="this.form = true" :key="1" class="item-adding" :style="{color: style?.addColor}">add item to {{parentNum}}</li>
+            </TransitionGroup> 
           </ul>  
         </Transition>
       <Form v-if="form" @createStuff="createStuff" @close="form = false"/>
     </li>
-  </Transition>
 </template>
 
 <script>
@@ -58,22 +57,11 @@ export default {
       click1: 0,
       click2: 0,
       form: false,
-      name: '',
     }
   },
   computed:{
-    isList(){
-      return this.model.children 
-    },
-    background(){
-      function getRandom(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min)) + min;
-      }
-      return `rgba(${getRandom(1,250)}, ${getRandom(1,350)}, ${getRandom(1,350)}, 0.8)`
-    
-      
+      isList(){
+        return this.model.children 
       }
     },
   methods: {
@@ -89,7 +77,6 @@ export default {
       if(!this.isList){
         this.core.children = [];
         this.isOpen = this.form = false;
-        console.log('change')
       }else{
         this.core.children = null
       }
@@ -100,7 +87,6 @@ export default {
         setTimeout(() => {
           if(!this.click2){
             this.isOpen = !this.isOpen
-            console.log('open');
             this.click1 = 0;
           }
         }, 200)
@@ -132,6 +118,11 @@ export default {
     width: 100%;
     padding: 3% 0 3% 7%;
     position: relative;
+    &__first{
+      & > .item-head > .item-button__del{
+        display: none;
+      }
+    }
     &-head{
       display: flex;
       align-items: center;
@@ -144,20 +135,7 @@ export default {
         text-transform: uppercase;
         }
       }
-      .marker{
-          width: 10px;
-          height: 10px;
-          background: linear-gradient(to bottom left, black 50%, $bg 50%);
-          display: block;
-          margin-left: 20px;
-          transform:rotate(-45deg);
-          position: relative;
-          align-self: center;
-          transition: all .3 ease-in-out;
-        &__open{
-          transform: rotate(135deg);
-        }
-      }
+      
     }
     
     &-button {
@@ -173,7 +151,7 @@ export default {
         display: block;
         // margin: auto;
         width: 80%;
-        height: 15%;
+        height: 16%;
         background: $red;
         transform: rotate(45deg);
         position: absolute;
@@ -184,10 +162,37 @@ export default {
           height: 100%;
           position: absolute;
           top:0;
-          left: 0;
+          // left: 0;
           transform: rotate(-90deg);
           background: inherit;
           border-radius: inherit;
+        }
+      }
+      &__marker{
+        margin-left: 5px;
+        span{
+          width:50%;
+          position: relative;
+          transform: translateX(-25%) rotate(45deg);
+          transition: all .3s ease-in-out;
+          background: black;
+          &:before{
+            top: 100%;
+            left: 0;
+            transform-origin: 105% 0% 0;
+            transform: rotate(90deg);
+            transition: all .3s ease-in-out;
+          }
+        }
+      }
+      &__open {
+        span {
+          transform: rotate(0);
+          &:before{
+            transform-origin: -20% 0% 0;
+            transform: rotate(0);
+            top: 0;
+          }
         }
       }
     }
