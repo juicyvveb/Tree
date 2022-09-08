@@ -23,7 +23,7 @@ export default {
   data(){
     return {
       select: 'default',
-      themes: themes
+      themes,
     }
   },
   watch: {
@@ -76,6 +76,31 @@ export default {
         display: none;
       }
     }
+  }
+}
+
+@media (min-width: $laptop) {
+  .thems {
+  
+  &-item{
+    
+    .label { 
+      &__active{
+        &:before{
+          transform: translateY(-20%);
+        }
+      }
+      &:before {
+        
+        min-width: 3vw;
+        min-height: 3vw;  
+        
+      }
+      span {
+        display: none;
+      }
+    }
+  }
   }
 }
 </style>

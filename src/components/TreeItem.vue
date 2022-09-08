@@ -2,7 +2,6 @@
     <li v-show="display" :class="{item:1, 'item__open': isOpen}">
 
       <div class="item-head">
-
         <h3 
         @click="clickListen()"
         :class="{'item-title__list': isList, 'item-title': 1}"
@@ -17,12 +16,12 @@
         
         <button 
           class="item-button item-button__del" 
-          @click="$emit('remove'), display = false">
+          @click="$emit('remove')">
           <span :style="{backgroundColor: style?.delColor}"></span>
         </button>
       </div>
         <Transition name="appear">
-          <ul v-show="isOpen && isList" class='item-list'>
+          <ul v-show="isOpen && isList" :class="{'item-list': 1, 'item-list__open': isOpen}">
             <TransitionGroup  name="list">
               <TreeItem v-for="(child, i) in model.children"
                 :key="child"
@@ -61,7 +60,7 @@ export default {
   },
   computed:{
       isList(){
-        return this.model.children 
+        return this.model.children && this.model.children.length
       }
     },
   methods: {
@@ -116,45 +115,42 @@ export default {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    padding: 3% 0 3% 7%;
-    position: relative;
+    padding: 0% 0 0% 7%;
     &__first{
-      & > .item-head > .item-button__del{
-        display: none;
+      & > .item-head {
+        border: none;
+        & > .item-button__del{
+          display: none;
+        }
       }
     }
     &-head{
+      padding: 3% 0;
       display: flex;
       align-items: center;
-      padding: 2%;
-      padding-left: 0;
+      border-top: 1px solid black;
+      width: 100%;
       .item-title{
-        width: fit-content;
         &__list{
         color: $blue;
         text-transform: uppercase;
         }
-      }
-      
+      } 
     }
     
     &-button {
       @include flexCenter;
       width: 25px;
       height: 25px;
-      margin-left: 20px;
+      margin-left: auto;
       background: none;
       border: none;
-      // border-radius: 5px;
       position: relative;
       span {
-        display: block;
-        // margin: auto;
         width: 80%;
         height: 16%;
         background: $red;
         transform: rotate(45deg);
-        position: absolute;
         border-radius: 5px;
         &:before{
           content: '';
@@ -162,7 +158,6 @@ export default {
           height: 100%;
           position: absolute;
           top:0;
-          // left: 0;
           transform: rotate(-90deg);
           background: inherit;
           border-radius: inherit;
@@ -201,6 +196,7 @@ export default {
     }
     &-adding{
       @include text(15px, 700, $green);
+      margin: 3% 0;
     }
   }
 
@@ -209,7 +205,6 @@ export default {
     height: auto;
     max-height: 60px;
     transition: all .5s ease-in-out;
-    overflow: hidden;
     &__open{
       max-height: 100%;
     }
@@ -230,15 +225,13 @@ export default {
 .list-leave-active {
   transition: all 0.5s ease;
 }
-
 .list-enter-from {
   transform: scale(.7);
 }
 .list-leave-to {
   opacity: 0;
-  transform: translateX(100%);
+  transform: translateX(30%);
 }
-
 .list-leave-active {
   position: absolute;
 }
