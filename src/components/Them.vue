@@ -48,10 +48,14 @@ export default {
   margin-top: 10%;
   &-item{
     margin-left: 3%;
+    &:first-child{
+      margin-left: 0;
+    }
     input{
       display: none;
     }
     .label { 
+          cursor: pointer;
       &__active{
         &:before{
           transform: translateY(-40%);
@@ -83,7 +87,6 @@ export default {
   .thems {
   
   &-item{
-    
     .label { 
       &__active{
         &:before{
@@ -98,6 +101,36 @@ export default {
       }
       span {
         display: none;
+      }
+    }
+  }
+  }
+}
+
+@media (min-width: $desktop) {
+  .thems {
+    margin-top: 4%;
+    &-item{
+    margin-left: 1%;
+    
+    .label { 
+      &__active{
+        &:before{
+          transform: translateY(-20%);
+        }
+      }
+      &:before {
+        min-width: 1vw;
+        min-height: 1vw;  
+      }
+      span {
+        display: none;
+      }
+      &:hover{
+        &:before{
+          transform: translateY(-10%);
+          box-shadow: 0px 0px 4px 1px;
+        }
       }
     }
   }

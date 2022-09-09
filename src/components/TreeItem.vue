@@ -10,7 +10,10 @@
           {{parentNum}} {{isList ? model.name || 'Node' : model.name || 'item'}}
         </h3>
 
-        <button :class="{'item-button': 1, 'item-button__open': isOpen, 'item-button__marker': 1}"  v-if="isList">
+        <button 
+          :class="{'item-button': 1, 'item-button__open': isOpen, 'item-button__marker': 1}"  
+          v-if="isList"
+          @click="isOpen = !isOpen">
           <span></span>
         </button>
         
@@ -21,7 +24,7 @@
         </button>
       </div>
         <Transition name="appear">
-          <ul v-show="isOpen && isList" :class="{'item-list': 1, 'item-list__open': isOpen}">
+          <ul v-if="isOpen && isList" :class="{'item-list': 1, 'item-list__open': isOpen}">
             <TransitionGroup  name="list">
               <TreeItem v-for="(child, i) in model.children"
                 :key="child"
@@ -74,7 +77,7 @@ export default {
     },
     changeType(){
       if(!this.isList){
-        this.core.children = [];
+        this.core.children = [{}];
         this.isOpen = this.form = false;
       }else{
         this.core.children = null
@@ -85,7 +88,7 @@ export default {
         this.click1 = new Date().getTime();
         setTimeout(() => {
           if(!this.click2){
-            this.isOpen = !this.isOpen
+            this.isList ? this.isOpen = !this.isOpen : 0
             this.click1 = 0;
           }
         }, 200)
@@ -94,12 +97,15 @@ export default {
         this.click2 = new Date().getTime();
         if(this.click2 - this.click1 < 250){
           this.changeType();
+          console.log('change')
         }
         this.click1 = this.click2 = 0;
       }
     },
     remove(i){
-      this.core.children.splice(i, 1);
+      console.log(i)
+      console.log(this.core.children.splice(i, 1))
+      // this.core.children.splice(i, 1);
     }
   },
   components: {
@@ -117,6 +123,7 @@ export default {
     width: 100%;
     padding: 0% 0 0% 7%;
     &__first{
+      padding: 0;
       & > .item-head {
         border: none;
         & > .item-button__del{
@@ -131,6 +138,7 @@ export default {
       border-top: 1px solid black;
       width: 100%;
       .item-title{
+        cursor: pointer;
         &__list{
         color: $blue;
         text-transform: uppercase;
@@ -195,6 +203,7 @@ export default {
       width: 100%;
     }
     &-adding{
+      cursor: pointer;
       @include text(15px, 700, $green);
       margin: 3% 0;
     }
@@ -220,17 +229,16 @@ export default {
 
 
 
-.list-move, /* apply transition to moving elements */
+// .list-move, /* apply transition to moving elements */
 .list-enter-active,
 .list-leave-active {
-  transition: all 0.5s ease;
+  transition: all 0.3s ease;
 }
 .list-enter-from {
   transform: scale(.7);
 }
 .list-leave-to {
-  opacity: 0;
-  transform: translateX(30%);
+  transform: translateX(100%);
 }
 .list-leave-active {
   position: absolute;
@@ -245,7 +253,32 @@ export default {
 .appear-enter-from,
 .appear-leave-to {
   opacity: 0;
-  transform: translateY(-50px);
+  transform: translateY(-15px);
+}
+
+@media (min-width: $desktop) {
+// .list-move, /* apply transition to moving elements */
+.list-enter-active,
+.list-leave-active {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.list-leave-to {
+  transform: translateX(50%);
+}
+
+
+
+.appear-move,
+.appear-enter-active,
+.appear-leave-active {
+  transition: all 0.3s ease;
+}
+.appear-enter-from,
+.appear-leave-to {
+  transform: translateY(-30px);
+}
 }
 
 </style>

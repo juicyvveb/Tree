@@ -1,6 +1,12 @@
 <template>
     <h3 class="title" :style="{color: style?.addColor}">Tree View</h3>
     <Them @changeThem="select"/>
+    <div class="info">
+      <div class="info-item">
+        <span :style="{color: style?.addColor}"><span>*</span> double click - </span>
+        <p :style="{color: style?.subColor}">change the type of list-item. A common item will become a Node, and a node will be a common item</p>
+      </div>
+    </div>
     <ul class="list" >
       <Item 
         :model="item" 
@@ -9,12 +15,7 @@
         class="item__first"
       />
     </ul>
-    <div class="info">
-      <div class="info-item">
-        <span :style="{color: style?.addColor}"><span>*</span> double click - </span>
-        <p :style="{color: style?.subColor}">change the type of list-item. A common item will become a Node, and a node will be a common item</p>
-      </div>
-    </div>
+    
 </template>
 
 <script>
@@ -141,14 +142,37 @@ export default {
   }
 }
 
-
-
-
 body{
   background: $bg;
   margin: 0;
   padding: 30px;
 }
+
+@media (min-width: $desktop) {
+  #app {
+  .list{
+    width: 50%;
+    margin: auto;
+    overflow: hidden;
+  }
+
+  .info {
+  margin-top: 3%;
+  text-align: center;
+  
+    &-item{
+        text-align: center;
+      }
+    }
+  }
+
+  body {
+    text-align:center;
+    padding: 30px 15%;
+  }
+}
+
+
 
 
 
