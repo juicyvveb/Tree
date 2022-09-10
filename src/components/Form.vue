@@ -1,9 +1,9 @@
 <template>
   <div class="container" @click.self="$emit('close')">
-    <form action="#" class="form">
+    <div class="form">
       <input type="text" class="form-input" v-model="name" @click="name = ''">
       <button @click="submit()" class="form-button">add</button>
-    </form>
+    </div>
   </div>
 </template>
 

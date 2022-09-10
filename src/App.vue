@@ -1,19 +1,21 @@
 <template>
-    <h3>Tree View</h3>
-    <ul :class="{list: 1, 'list__open': open}" >
-      <Item :model="item" 
-      @click="open = !open"
-      :parentNum="`${i+1}`" v-for="(item,i) in tree" :key="i"
-      :style="selectedThem || {}"/>
-    </ul>
+    <h3 class="title" :style="{color: style?.addColor}">Tree View</h3>
+    <Them @changeThem="select"/>
     <div class="info">
       <div class="info-item">
         <span :style="{color: style?.addColor}"><span>*</span> double click - </span>
         <p :style="{color: style?.subColor}">change the type of list-item. A common item will become a Node, and a node will be a common item</p>
       </div>
     </div>
-    <Them @changeThem="select"/>
-    <h4>{{selectedThem || 'nothing'}}</h4>
+    <ul class="list" >
+      <Item 
+        :model="item" 
+        :parentNum="`${i+1}`" v-for="(item,i) in tree" :key="i"
+        :style="selectedThem || {}"
+        class="item__first"
+      />
+    </ul>
+    
 </template>
 
 <script>
@@ -76,7 +78,6 @@ export default {
   data(){
     return {
       tree,
-      open: false,
       selectedThem: '',
     }
   },
@@ -114,32 +115,60 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-
-  h3 {
+  position: relative;
+  .title {
     text-align: center;
+    text-transform: uppercase;
   }
-}
-body{
-  background: $bg;
-  margin: 0;
-  padding: 30px;
-}
-
-.info {
+  .list{
+    margin-top: auto;
+  }
+  .info {
   margin-top: 10%;
   &-item{
-    span {
+    span, p {
       @include text(15px, 500, gray);
       font-style: italic;
       span{
         @include text(20px, 500, $green);
       }
     }
-    p{
-      @include text(15px, 500, black);
-      display: inline;
+      p{
+        color: black;
+        font-style: normal;
+        display: inline;
+      }
     }
+  }
+}
+
+body{
+  background: $bg;
+  margin: 0;
+  padding: 30px;
+}
+
+@media (min-width: $desktop) {
+  #app {
+  .list{
+    width: 50%;
+    margin: auto;
+    overflow: hidden;
+  }
+
+  .info {
+  margin-top: 3%;
+  text-align: center;
+  
+    &-item{
+        text-align: center;
+      }
+    }
+  }
+
+  body {
+    text-align:center;
+    padding: 30px 15%;
   }
 }
 

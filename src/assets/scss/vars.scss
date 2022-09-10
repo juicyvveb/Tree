@@ -19,6 +19,7 @@ $gray: rgb(144, 147, 144);
 $green: rgb(12, 199, 27);
 
 $laptop: 720px;
+$desktop: 1024px;
 
 *{
   list-style: none;
@@ -29,5 +30,9 @@ $laptop: 720px;
   transition-property: color, background-color;
   transition-timing-function: ease-in-out;
   transition-duration: .3s;
+}
+
+button {
+  cursor: pointer;
 }
 
