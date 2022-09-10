@@ -36,4 +36,55 @@ let themes = {
     }
 }
 
-export {themes}
+const tree = [{
+  name: '',
+  children: [
+    {
+      name: ''
+    },
+    {
+      name: 'named'
+    },
+    {
+      name: 'named',
+      children: [
+        {
+          name: ''
+        },
+        {
+          name: ''
+        },
+        {
+          name: '',
+          children: [
+            {
+              name: 'sub'
+            },
+            {
+              name: 'sub'
+            }
+          ]
+        },
+        {
+          name: 'named',
+          children: [
+            {
+              name: ''
+            },
+            {
+              name: 'named'
+            },
+            {
+              name: ''
+            },
+            {
+              name: 'named'
+            }
+          ]
+        },
+      ]
+    }
+  ]
+}]
+
+export {themes, tree}

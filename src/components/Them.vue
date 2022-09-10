@@ -1,16 +1,21 @@
 <template>
   <div class="thems">
     <div class="thems-item" v-for="(them,i) in themsArr" :key="i"  >
+
       <input 
         type="radio"
         :id="them"
         :value="them"
         v-model="select"    
       >
+
       <label 
         :for="them"
         :class="{label: 1, 'label__active': select == them, 'label__default': them=='default'}"
-        :style="{backgroundColor: themes[them]?.bgColor}"><span>{{them}}</span></label>
+        :style="{backgroundColor: themes[them]?.bgColor}">
+        <span>{{them}}</span>
+      </label>
+      
     </div>
   </div>
   

@@ -21,57 +21,8 @@
 <script>
 import Item from './components/TreeItem.vue';
 import Them from './components/Them.vue';
+import {tree} from './assets/js/utils';
 
-const tree = [{
-  name: '',
-  children: [
-    {
-      name: ''
-    },
-    {
-      name: 'named'
-    },
-    {
-      name: 'named',
-      children: [
-        {
-          name: ''
-        },
-        {
-          name: ''
-        },
-        {
-          name: '',
-          children: [
-            {
-              name: 'sub'
-            },
-            {
-              name: 'sub'
-            }
-          ]
-        },
-        {
-          name: 'named',
-          children: [
-            {
-              name: ''
-            },
-            {
-              name: 'named'
-            },
-            {
-              name: ''
-            },
-            {
-              name: 'named'
-            }
-          ]
-        },
-      ]
-    }
-  ]
-}]
 
 export default {
   name: 'App',

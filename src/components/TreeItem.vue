@@ -2,6 +2,7 @@
     <li v-show="display" :class="{item:1, 'item__open': isOpen}">
 
       <div class="item-head">
+        
         <h3 
         @click="clickListen()"
         :class="{'item-title__list': isList, 'item-title': 1}"
@@ -22,7 +23,9 @@
           @click="$emit('remove')">
           <span :style="{backgroundColor: style?.delColor}"></span>
         </button>
+
       </div>
+
         <Transition name="appear">
           <ul v-if="isOpen && isList" :class="{'item-list': 1, 'item-list__open': isOpen}">
             <TransitionGroup  name="list">
@@ -37,6 +40,7 @@
             </TransitionGroup> 
           </ul>  
         </Transition>
+
       <Form v-if="form" @createStuff="createStuff" @close="form = false"/>
     </li>
 </template>
@@ -97,15 +101,12 @@ export default {
         this.click2 = new Date().getTime();
         if(this.click2 - this.click1 < 250){
           this.changeType();
-          console.log('change')
         }
         this.click1 = this.click2 = 0;
       }
     },
     remove(i){
-      console.log(i)
-      console.log(this.core.children.splice(i, 1))
-      // this.core.children.splice(i, 1);
+      this.core.children.splice(i, 1);
     }
   },
   components: {
@@ -219,11 +220,7 @@ export default {
     }
   }
  
- 
 
-@media (min-width: $laptop){
-    
-}
 //transition
 
 
@@ -245,7 +242,6 @@ export default {
 }
 
 
-.appear-move,
 .appear-enter-active,
 .appear-leave-active {
   transition: all 0.5s ease;
